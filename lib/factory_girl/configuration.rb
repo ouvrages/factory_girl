@@ -15,7 +15,11 @@ module FactoryGirl
 
       @duplicate_attribute_assignment_from_initialize_with = true
 
-      to_create {|instance| instance.save! }
+      to_create do |instance|
+        unless instance.save
+          raise "Invalid record: " + instance.errors.full_messages.join(", ")
+        end
+      end
       initialize_with { new }
     end
 
